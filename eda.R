@@ -60,26 +60,33 @@ boxplot(edusex$edad,edusex$anios_educ,main="Boxplot edad y años de educacion")
 
 ## Test para el coef. de correlacion
 cor.test(x=edusex$edad, y=edusex$anios_educ, method = "pearson")
+cor.test(x=edusex$anios_educ, y=edusex$bajo_socioecon, method = "pearson")
+cor.test(x=edusex$en_pareja, y=edusex$anios_educ, method = "pearson")
+cor.test(x=edusex$num_hijos, y=edusex$bajo_socioecon, method = "pearson")
 
-## Ajusto la regresion lineal
-Reg_Lineal_G <- lm(anios_educ ~ edad, data=edusex)
-summary(Reg_Lineal_G)
+tabla1 <- table(edusex$edad,edusex$num_hijos)
+tabla1
 
-## Grafico
-plot(x=edusex$edad, y=edusex$anios_educ, main="anios_educ ~ edad")
-abline(Reg_Lineal_G)
+plot(tabla1,main = "Gráfico de edad vs num. de hijos")
 
-##############################
+tabla2 <- table(edusex$edad,edusex$en_pareja)
+tabla2
 
-## Analisis de Regresion entre Volumen y Altura
+plot(tabla2,main = "Gráfico de edad vs En pareja")
 
-## Test para el coef. de correlacion
-cor.test(x=trees$Height, y=trees$Volume,  method = "pearson")
+tabla3 <- table(edusex$edad,edusex$anios_educ)
+tabla3
+plot(tabla3,main = "Gráfico de edad vs Años de Educacion")
 
-## Ajusto la regresion lineal
-Reg_Lineal_H <- lm(Volume  ~ Height, data=trees)
-summary(Reg_Lineal_H)
 
-## Grafico
-plot(x=trees$Height, y=trees$Volume, main="Volume ~ Height")
-abline(Reg_Lineal_H)
+#Generamos facet basados en la variable day
+ggplot(edusex,aes(x=edad,y=id,color=en_pareja))+
+  geom_point(alpha=0.7)+
+  labs(x='ticket total',y='propinas',
+       title='Grafico de facturacion y propinas',
+       subtitle = 'ICARO - Intro a Data Science con R',
+       caption = 'Los datos fueron obtenidos en reshape2')+
+  theme_bw()+
+  facet_wrap(edad~.)
+
+pairs(~edusex$edad + edusex$anios_educ + edusex$num_hijos)
